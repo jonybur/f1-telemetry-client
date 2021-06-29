@@ -11,5 +11,6 @@ export const SESSION_TYPES: string[] = [
   'OSQ',
   'R',
   'R2',
+  'R3',
   'Time Trial',
 ];

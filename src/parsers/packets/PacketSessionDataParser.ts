@@ -27,7 +27,7 @@ export class PacketSessionDataParser extends F1Parser {
       this.uint8('m_era');
     }
 
-    if (packetFormat === 2019 || packetFormat === 2020) {
+    if (packetFormat === 2019 || packetFormat === 2020 || packetFormat === 2021) {
       this.uint8('m_formula');
     }
 
@@ -43,12 +43,37 @@ export class PacketSessionDataParser extends F1Parser {
         .uint8('m_safetyCarStatus')
         .uint8('m_networkGame');
 
+    if (packetFormat === 2020 || packetFormat === 2021) {
+      this.uint8('m_numWeatherForecastSamples');
+    };
+
     if (packetFormat === 2020) {
-      this.uint8('m_numWeatherForecastSamples')
-          .array('m_weatherForecastSamples', {
-            type: new WeatherForecastSampleParser(),
-            length: 20,
-          });
+      this.array('m_weatherForecastSamples', {
+        type: new WeatherForecastSampleParser(packetFormat),
+        length: 20,
+      });
+    };
+
+    if (packetFormat === 2021) {
+      this.array('m_weatherForecastSamples', {
+        type: new WeatherForecastSampleParser(packetFormat),
+        length: 56,
+      })
+      .uint8('m_forecastAccuracy')
+      .uint8('m_aiDifficulty')
+      .uint32le('m_seasonLinkIdentifier')
+      .uint32le('m_weekendLinkIdentifier')
+      .unit32le('m_sessionLinkIdentifier')
+      .unit8('m_pitStopWindowIdealLap')
+      .unit8('m_pitStopWindowLatestLap')
+      .uint8('m_pitStopRejoinPosition')
+      .uint8('m_steeringAssist')
+      .uint8('m_brakingAssist')
+      .uint8('m_gearboxAssist')
+      .unit8('m_pitAssist')
+      .uint8('m_pitReleaseAssist')
+      .uint8('m_ERSAssist')
+      .uint8('m_DRSAssist')
     }
 
     this.data = this.fromBuffer(buffer);

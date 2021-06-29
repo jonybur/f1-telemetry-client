@@ -10,7 +10,7 @@ export class PacketHeaderParser extends F1Parser {
       this.uint8('m_packetVersion').uint8('m_packetId');
     }
 
-    if (packetFormat === 2019 || packetFormat === 2020) {
+    if (packetFormat === 2019 || packetFormat === 2020 || packetFormat === 2021) {
       this.uint8('m_gameMajorVersion')
           .uint8('m_gameMinorVersion')
           .uint8('m_packetVersion')
@@ -27,7 +27,7 @@ export class PacketHeaderParser extends F1Parser {
         .uint32('m_frameIdentifier')
         .uint8('m_playerCarIndex');
 
-    if (packetFormat === 2020) {
+    if (packetFormat === 2020 || packetFormat === 2021) {
       this.uint8('m_secondaryPlayerCarIndex');
     }
   }
